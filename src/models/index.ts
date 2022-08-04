@@ -2,11 +2,7 @@ import Sequelize from 'sequelize';
 import ModelFactoryInterface from './typings/ModelFactoryInterface';
 import { UserFactory } from './User';
 import { TokenFactory } from './Token';
-import { RoomFactory } from './Room';
-import { ParticipantFactory } from './Participant';
-import { TaskFactory } from './Task';
-import { DocumentFactory } from './Document';
-import { DifferenceFactory } from './Difference';
+import { VariableFactory } from './Variable';
 
 const createModels: Function = (): ModelFactoryInterface => {
 	const {
@@ -31,11 +27,7 @@ const createModels: Function = (): ModelFactoryInterface => {
 		Sequelize,
 		User: UserFactory(sequelize, Sequelize),
 		Token: TokenFactory(sequelize, Sequelize),
-		Room: RoomFactory(sequelize, Sequelize),
-		Participant: ParticipantFactory(sequelize, Sequelize),
-		Task: TaskFactory(sequelize, Sequelize),
-		Document: DocumentFactory(sequelize, Sequelize),
-		Difference: DifferenceFactory(sequelize, Sequelize)
+		Variable: VariableFactory(sequelize, Sequelize),
 	};
 
 	Object.keys(db).forEach(

@@ -6,7 +6,6 @@ import ModelFactoryInterface from './typings/ModelFactoryInterface';
 export interface UserAttributes {
 	id?: number;
 	name: string;
-	type: 'lecturer' | 'student';
 	username: string;
 	password: string;
 	created_at?: Date;
@@ -28,10 +27,6 @@ export const UserFactory: Factory<UserInstance, UserAttributes> = (
 		name: {
 			type: DataTypes.STRING(191),
 			allowNull: false,
-		},
-		type: {
-			type: DataTypes.ENUM(['lecturer', 'student']),
-			allowNull: false
 		},
 		username: {
 			type: DataTypes.STRING(191),
