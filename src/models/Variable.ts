@@ -5,7 +5,13 @@ import ModelFactoryInterface from './typings/ModelFactoryInterface';
 
 export interface VariableAttributes {
 	id?: number;
-	name: string;
+	gender: string;
+	occupation: string;
+	age: number;
+	x1: number;
+	x2: number;
+	x3: number;
+	x4: number;
 	created_at?: Date;
 	updated_at?: Date;
 }
@@ -22,9 +28,33 @@ export const VariableFactory: Factory<VariableInstance, VariableAttributes> = (
 	DataTypes: Sequelize.DataTypes,
 ): Sequelize.Model<VariableInstance, VariableAttributes> => {
 	const attributes: SequelizeAttributes<VariableAttributes> = {
-		name: {
-			type: DataTypes.STRING(191),
+		gender: {
+			type: DataTypes.ENUM(["Laki - Laki", "Perempuan"]),
 			allowNull: false,
+		},
+		occupation: {
+			type: DataTypes.STRING(191),
+			allowNull: false
+		},
+		age: {
+			type: DataTypes.INTEGER(4),
+			allowNull: false,
+		},
+		x1: {
+			type: DataTypes.FLOAT,
+			allowNull: false
+		},
+		x2: {
+			type: DataTypes.FLOAT,
+			allowNull: false
+		},
+		x3: {
+			type: DataTypes.FLOAT,
+			allowNull: false
+		},
+		x4: {
+			type: DataTypes.FLOAT,
+			allowNull: false
 		},
 	};
 	const Variable: Sequelize.Model<VariableInstance, VariableAttributes> = sequelize.define<
