@@ -8,6 +8,13 @@ import sequelize from 'sequelize';
 import { Parser } from '../helpers/Parser';
 import NotFoundError from '../classes/NotFoundError';
 import { VariableInstance, VariableAttributes } from '../models/Variable';
+import {
+	getTotalXnPowScore,
+	getTotalXnxnScore,
+	getTotalXnYScore,
+	getTotalXScore,
+} from '../helpers/getTotalScore';
+import { generateMatrixAn } from '../helpers/generateMatrix';
 
 const variablesRoutes: Routes = (
 	app: express.Application,
@@ -40,9 +47,49 @@ const variablesRoutes: Routes = (
 				const data: PaginatedResult<VariableInstance> = await models.Variable.findAndCountAll({
 					attributes: ['x1', 'x2', 'x3', 'x4'],
 				});
-				const body: OkResponse = { data };
+				const totalYScore = data.rows
+					.map(({ x1, x2, x3, x4 }) => Math.fround((x1 + x2 + x3 + x4) / 4))
+					.reduce((a, b) => a + b);
+				const totalX1yScore = getTotalXnYScore(data.rows, 'x1');
+				const totalX2yScore = getTotalXnYScore(data.rows, 'x2');
+				const totalX3yScore = getTotalXnYScore(data.rows, 'x3');
+				const totalX4yScore = getTotalXnYScore(data.rows, 'x4');
+				const matrixH = [
+					totalYScore,
+					totalX1yScore,
+					totalX2yScore,
+					totalX3yScore,
+					totalX4yScore,
+				];
+				const totalX1Score = getTotalXScore(data.rows, 'x1');
+				const totalX2Score = getTotalXScore(data.rows, 'x2');
+				const totalX3Score = getTotalXScore(data.rows, 'x3');
+				const totalX4Score = getTotalXScore(data.rows, 'x4');
+				const totalX1X2Score = getTotalXnxnScore(data.rows, 'x1', 'x2');
+				const totalX1X4Score = getTotalXnxnScore(data.rows, 'x1', 'x3');
+				const totalX1X3Score = getTotalXnxnScore(data.rows, 'x1', 'x4');
+				const totalX2X3Score = getTotalXnxnScore(data.rows, 'x2', 'x3');
+				const totalX2X4Score = getTotalXnxnScore(data.rows, 'x2', 'x4');
+				const totalX3X4Score = getTotalXnxnScore(data.rows, 'x3', 'x4');
+				const totalX1PowScore = getTotalXnPowScore(data.rows, 'x1');
+				const totalX2PowScore = getTotalXnPowScore(data.rows, 'x2');
+				const totalX3PowScore = getTotalXnPowScore(data.rows, 'x3');
+				const totalX4PowScore = getTotalXnPowScore(data.rows, 'x4');
+				const matrixA = [
+					[data.count, totalX1Score, totalX2Score, totalX3Score, totalX4Score],
+					[totalX1Score, totalX1PowScore, totalX1X2Score, totalX1X3Score, totalX1X4Score],
+					[totalX2Score, totalX1X2Score, totalX2PowScore, totalX2X3Score, totalX2X4Score],
+					[totalX3Score, totalX1X3Score, totalX2X3Score, totalX3PowScore, totalX3X4Score],
+					[totalX4Score, totalX1X4Score, totalX2X4Score, totalX2X4Score, totalX4PowScore],
+				];
 
-				res.json(body);
+				const matrixA1 = generateMatrixAn(matrixA, matrixH, 0);
+				const matrixA2 = generateMatrixAn(matrixA, matrixH, 1);
+				const matrixA3 = generateMatrixAn(matrixA, matrixH, 2);
+				const matrixA4 = generateMatrixAn(matrixA, matrixH, 3);
+				const matrixA5 = generateMatrixAn(matrixA, matrixH, 4);
+
+				res.json({ matrixH, matrixA, matrixA1, matrixA2, matrixA3, matrixA4, matrixA5 });
 			},
 		),
 	);
