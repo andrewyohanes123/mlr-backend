@@ -15,6 +15,7 @@ import {
 	getTotalXScore,
 } from '../helpers/getTotalScore';
 import { generateMatrixAn } from '../helpers/generateMatrix';
+import * as math from 'mathjs';
 
 const variablesRoutes: Routes = (
 	app: express.Application,
@@ -66,8 +67,8 @@ const variablesRoutes: Routes = (
 				const totalX3Score = getTotalXScore(data.rows, 'x3');
 				const totalX4Score = getTotalXScore(data.rows, 'x4');
 				const totalX1X2Score = getTotalXnxnScore(data.rows, 'x1', 'x2');
-				const totalX1X4Score = getTotalXnxnScore(data.rows, 'x1', 'x3');
-				const totalX1X3Score = getTotalXnxnScore(data.rows, 'x1', 'x4');
+				const totalX1X3Score = getTotalXnxnScore(data.rows, 'x1', 'x3');
+				const totalX1X4Score = getTotalXnxnScore(data.rows, 'x1', 'x4');
 				const totalX2X3Score = getTotalXnxnScore(data.rows, 'x2', 'x3');
 				const totalX2X4Score = getTotalXnxnScore(data.rows, 'x2', 'x4');
 				const totalX3X4Score = getTotalXnxnScore(data.rows, 'x3', 'x4');
@@ -80,7 +81,7 @@ const variablesRoutes: Routes = (
 					[totalX1Score, totalX1PowScore, totalX1X2Score, totalX1X3Score, totalX1X4Score],
 					[totalX2Score, totalX1X2Score, totalX2PowScore, totalX2X3Score, totalX2X4Score],
 					[totalX3Score, totalX1X3Score, totalX2X3Score, totalX3PowScore, totalX3X4Score],
-					[totalX4Score, totalX1X4Score, totalX2X4Score, totalX2X4Score, totalX4PowScore],
+					[totalX4Score, totalX1X4Score, totalX2X4Score, totalX3X4Score, totalX4PowScore],
 				];
 
 				const matrixA1 = generateMatrixAn(matrixA, matrixH, 0);
@@ -89,7 +90,40 @@ const variablesRoutes: Routes = (
 				const matrixA4 = generateMatrixAn(matrixA, matrixH, 3);
 				const matrixA5 = generateMatrixAn(matrixA, matrixH, 4);
 
-				res.json({ matrixH, matrixA, matrixA1, matrixA2, matrixA3, matrixA4, matrixA5 });
+				console.table(matrixA);
+
+				const detA = math.det(math.matrix(matrixA));
+				const detA1 = math.det(math.matrix(matrixA1));
+				const detA2 = math.det(math.matrix(matrixA2));
+				const detA3 = math.det(math.matrix(matrixA3));
+				const detA4 = math.det(math.matrix(matrixA4));
+				const detA5 = math.det(math.matrix(matrixA5));
+				const b1 = detA1 / detA;
+				const b2 = detA2 / detA;
+				const b3 = detA3 / detA;
+				const b4 = detA4 / detA;
+				const b5 = detA5 / detA;
+
+				res.json({
+					matrixH,
+					matrixA,
+					matrixA1,
+					matrixA2,
+					matrixA3,
+					matrixA4,
+					matrixA5,
+					detA,
+					detA1,
+					detA2,
+					detA3,
+					detA4,
+					detA5,
+					b1,
+					b2,
+					b3,
+					b4,
+					b5,
+				});
 			},
 		),
 	);
