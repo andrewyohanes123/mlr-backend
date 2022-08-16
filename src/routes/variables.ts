@@ -171,20 +171,20 @@ const variablesRoutes: Routes = (
 		),
 	);
 
-	router.delete(
-		'/:id',
-		a(
-			async (req: express.Request, res: express.Response): Promise<void> => {
-				const { id }: any = req.params;
-				const variable: VariableInstance | null = await models.Variable.findByPk(id);
-				if (!variable) throw new NotFoundError('Variable tidak ditemukan');
-				await variable.destroy();
-				const body: OkResponse = { data: variable };
+	// router.delete(
+	// 	'/:id',
+	// 	a(
+	// 		async (req: express.Request, res: express.Response): Promise<void> => {
+	// 			const { id }: any = req.params;
+	// 			const variable: VariableInstance | null = await models.Variable.findByPk(id);
+	// 			if (!variable) throw new NotFoundError('Variable tidak ditemukan');
+	// 			await variable.destroy();
+	// 			const body: OkResponse = { data: variable };
 
-				res.json(body);
-			},
-		),
-	);
+	// 			res.json(body);
+	// 		},
+	// 	),
+	// );
 
 	router.delete(
 		'/all',
