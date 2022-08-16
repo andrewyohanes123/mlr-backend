@@ -186,6 +186,23 @@ const variablesRoutes: Routes = (
 		),
 	);
 
+	router.delete(
+		'/all',
+		a(
+			async (req: express.Request, res: express.Response): Promise<void> => {
+				const variables: VariableInstance[]= await models.Variable.findAll();
+				
+				for (let i = 0; i < variables.length; i++) {
+					await variables[i].destroy();
+				}
+
+				const body: OkResponse = {data: {deleted_rows: variables.length}};
+
+				res.json(body);
+			},
+		),
+	);
+
 	return router;
 };
 
