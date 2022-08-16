@@ -50,7 +50,7 @@ const variablesRoutes: Routes = (
 				});
 				const totalYScore = data.rows
 					.map(({ x1, x2, x3, x4 }) => Math.fround((x1 + x2 + x3 + x4) / 4))
-					.reduce((a, b) => a + b);
+					.reduce((a, b) => a + b, 0);
 				const totalX1yScore = getTotalXnYScore(data.rows, 'x1');
 				const totalX2yScore = getTotalXnYScore(data.rows, 'x2');
 				const totalX3yScore = getTotalXnYScore(data.rows, 'x3');
@@ -89,8 +89,6 @@ const variablesRoutes: Routes = (
 				const matrixA3 = generateMatrixAn(matrixA, matrixH, 2);
 				const matrixA4 = generateMatrixAn(matrixA, matrixH, 3);
 				const matrixA5 = generateMatrixAn(matrixA, matrixH, 4);
-
-				console.table(matrixA);
 
 				const detA = math.det(math.matrix(matrixA));
 				const detA1 = math.det(math.matrix(matrixA1));
